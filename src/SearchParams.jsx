@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import Pet from "./Pet";
+import Results from "./Results";
 import useBreedList from "./useBreedList";
-
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
@@ -18,8 +17,7 @@ const SearchParams = () => {
 
   async function requestPets() {
     const res = await fetch(
-      `https://pets-v2.dev-api.com/pets?animal=${animal}&location=${location}
-      &breed=${breed}`
+      `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
     );
     const json = await res.json();
 
@@ -43,6 +41,7 @@ const SearchParams = () => {
             placeholder="Location"
           />
         </label>
+
         <label htmlFor="animal">
           Animal
           <select
@@ -56,37 +55,34 @@ const SearchParams = () => {
           >
             <option />
             {ANIMALS.map((animal) => (
-              <option key={animal}>{animal}</option>
+              <option key={animal} value={animal}>
+                {animal}
+              </option>
             ))}
           </select>
         </label>
+
         <label htmlFor="animal">
           Breed
           <select
             name="breed"
-            disabled={breeds.length === 0}
+            disabled={!breeds.length}
             id="breed"
             value={breed}
-            onChange={(e) => {
-              setBreed(e.target.value);
-            }}
+            onChange={(e) => setBreed(e.target.value)}
           >
             <option />
             {breeds.map((breed) => (
-              <option key={breed}>{breed}</option>
+              <option key={breed} value={breed}>
+                {breed}
+              </option>
             ))}
           </select>
         </label>
+
         <button>Submit</button>
       </form>
-      {pets.map((pet) => (
-        <Pet
-          name={pet.name}
-          animal={pet.animal}
-          breed={pet.breed}
-          key={pet.id}
-        />
-      ))}
+      <Results pets={pets} />
     </div>
   );
 };
