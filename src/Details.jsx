@@ -1,5 +1,6 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import ErrorBoundary from "./ErrorBoundary";
 import Carousel from "./Carousel";
 import fetchPet from "./fetchPet";
 
@@ -32,4 +33,20 @@ const Details = () => {
   );
 };
 
-export default Details;
+// Good use of the spread operator, not opinionated about what kind of props
+function DetailsErrorBoundary(props) {
+  return (
+    <ErrorBoundary
+      errorComponent={
+        <h2>
+          There was an error with this listing.
+          <Link to="/">Click here to return home</Link>
+        </h2>
+      }
+    >
+      <Details {...props} />
+    </ErrorBoundary>
+  );
+}
+
+export default DetailsErrorBoundary;
